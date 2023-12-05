@@ -8,6 +8,13 @@ advent-get-input() {
   printf $day > day.txt
 }
 
+advent-get-description() {
+  year=$(cat year.txt)
+  day=$(cat day.txt)
+  curl -H "Cookie: session=$(cat session.txt)" -s https://adventofcode.com/${year}/day/${day} \
+  | jq -srR 'match("<main>.+</main>";"gm").string' | lynx -stdin -dump -nolist > description.txt
+}
+
 advent-part-a() {
   cat > a.jq <<TERM
 #!/usr/bin/env jq -n -R -f
