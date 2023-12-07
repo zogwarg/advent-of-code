@@ -38,7 +38,8 @@ advent-submit-a() {
   curl -s https://adventofcode.com/${year}/day/${day}/answer \
     -H "Cookie: session=$(cat session.txt)" \
     -H 'content-type: application/x-www-form-urlencoded' \
-    -d "level=1&answer=$(./a.jq input.txt | jq -rR '@uri')"
+    -d "level=1&answer=$(./a.jq input.txt | jq -rR '@uri')" \
+    | jq -srR 'match("<main>.+</main>";"gm").string' | lynx -stdin -dump -nolist
 }
 
 advent-submit-b() {
@@ -47,7 +48,8 @@ advent-submit-b() {
   curl -s https://adventofcode.com/${year}/day/${day}/answer \
     -H "Cookie: session=$(cat session.txt)" \
     -H 'content-type: application/x-www-form-urlencoded' \
-    -d "level=2&answer=$(./b.jq input.txt | jq -rR '@uri')"
+    -d "level=2&answer=$(./b.jq input.txt | jq -rR '@uri')" \
+    | jq -srR 'match("<main>.+</main>";"gm").string' | lynx -stdin -dump -nolist
 }
 
 advent-write-day() {
