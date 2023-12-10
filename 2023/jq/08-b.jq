@@ -11,7 +11,7 @@
   ] | add
 ) as $map |
 
-# List primes for GCM test / factorization
+# List primes for GCD test / factorization
 [
   2, 3, 5, 7, 11, 13, 17, 19,
   23, 29, 31, 37, 41, 43, 47,
@@ -37,12 +37,12 @@ reduce (
       length != 1                                           # Only one ..Z per loop
       or ( .[0].value[0] != $loop_size )                    # First ..Z idx = loop size
       or ( [ .[0].value[0] / $l ] | inside($primes) | not ) # loop_size = ( prime x $l )
-      or ( .[0].value[0] / $l  > $l )                       # GCM(loop_sizes) = $l
+      or ( .[0].value[0] / $l  > $l )                       # GCD(loop_sizes) = $l
     ) then "Input does not fit expected pattern" | halt_error else
       # Under these conditions, synched positions of ..Zs happen at:
-      # LCM = Π(loop_size_i / GCM) * GCM
+      # LCM = Π(loop_size_i / GCD) * GCD
 
-      # loop_size_i / GCM
+      # loop_size_i / GCD
       .[0].value[0] / $l
     end
 ) as $i (1; . * $i)
