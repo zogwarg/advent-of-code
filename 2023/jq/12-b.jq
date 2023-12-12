@@ -1,9 +1,19 @@
 #!/usr/bin/env jq -n -R -f
 
 reduce (
+  # Option to run in parallel using xargs
+  # Eg: ( seq 0 9 | \
+  #        xargs -P 10 -n 1 ./2023/jq/12-b.jq input.txt --argjson s 10 --argjson i \
+  #      ) | jq -s add
+  # Execution time 17m10s -> 20s
+  if $ARGS.named.s and $ARGS.named.i then #
+    [inputs] | to_entries[] | select(.key % $ARGS.named.s == $ARGS.named.i) | .value / " "
+  else
+    inputs / " "
+  end |
   # Parse inputs as:
   # sequence="..#..#" continguous_blocks = [1,2,3]
-  inputs / " " | .[1] |= (. / "," | map(tonumber)) |
+  .[1] |= (. / "," | map(tonumber)) |
   .[0] |= ([ range(5) as $i | . ] | join("?"))     |
   .[1] |= ([ range(5) as $i | . ] | add)
   | debug
