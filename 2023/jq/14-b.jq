@@ -1,7 +1,7 @@
 #!/usr/bin/env jq -n -R -f
 [ inputs / "" ] as $inputs |
 
-def oneCyle:
+def oneCycle:
   # Tilt UP          = T . MAP(scan) . T
   # Rotate           = T . MAP(reverse)
   # Titl UP . Rotate = T . MAP(scan) . Map(reverse) | T . T = Identity
@@ -24,11 +24,11 @@ def group_of($n): . as $in | [ range(0;length;$n) | $in[.:(.+$n)]];
   i: null                      # .i = Index of first state encountered twice
 } |
 
-until(.i; .c += 1 |                           # Until loop detected:
-  .s |= oneCyle | (.s|map(add)|add) as $state # Update state
-                                              #
-  | .i = (.l|index($state))                   # Was state seen before?
-  | .l += [$state]                            # Append state to .l
+until(.i; .c += 1 |                            # Until loop detected:
+  .s |= oneCycle | (.s|map(add)|add) as $state # Update state
+                                               #
+  | .i = (.l|index($state))                    # Was state seen before?
+  | .l += [$state]                             # Append state to .l
 )
 
 # Get loop size
