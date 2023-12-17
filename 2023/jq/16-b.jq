@@ -1,6 +1,14 @@
 #!/usr/bin/env jq -n -R -f
 
 [ inputs / "" ]   as $grid | # Parsing inputs to grid
+
+# Small speed up use pre-transformed grids for
+# Search in each direction
+( $grid | map(add))                   as $rgrid |
+( $grid | map(reverse|add))           as $lgrid |
+( $grid | transpose|map(add))         as $tgrid |
+( $grid | transpose|map(reverse|add)) as $bgrid |
+
 ($grid   |length) as $h    | # Height of grid
 ($grid[0]|length) as $w    | # Width  of grid
 
@@ -18,7 +26,7 @@ reduce ( # Starting from evert point outside the border pointing in:
         # outside the grid, or if already done
         if ( $x + $dx ) < 0 or ( $x + $dx ) >= $w or
            ( $y + $dy ) < 0 or ( $y + $dy ) >= $h or
-           ( .done[ [$x,$y,$dx,$dy]|join(",") ] )
+           ( .done[[$x,$y,$dx,$dy]|join(",") ] )
         then .
 
         # Contrary to part 1, optimized so that instead of stepping once, we find the
@@ -27,7 +35,7 @@ reduce ( # Starting from evert point outside the border pointing in:
 
         # ⮕
         elif $dx == 1 then
-          ($grid[$y][$x+1:]|add|match("[|\\\\/]|.$")) as {offset:$stop, string: $square} |
+          ($rgrid[$y][$x+1:]|match("[|\\\\/]|.$")) as {offset:$stop, string: $square} |
           .energized += [ range($x; $x+$stop+2) as $xi | [$xi,$y] ] |
           if $square == "|" then
             .beams += [{x: ($x+$stop+1), y: $y, dx: 0, dy: (1,-1)}] # ⬍ Two new beams
@@ -38,7 +46,7 @@ reduce ( # Starting from evert point outside the border pointing in:
           end
         # ⬅
         elif $dx == -1 then
-          ($grid[$y][0:$x]|reverse|add|match("[|\\\\/]|.$")) as {offset:$stop, string: $square} |
+          ($lgrid[$y][$w-$x:]|match("[|\\\\/]|.$")) as {offset:$stop, string: $square} |
           .energized += [ range($x-$stop-1;$x+1) as $xi | [$xi,$y]] |
           if $square == "|" then
             .beams += [{x: ($x-$stop-1), y: $y, dx: 0, dy: (1,-1)}] # ⬍ Two new beams
@@ -49,7 +57,7 @@ reduce ( # Starting from evert point outside the border pointing in:
           end
         # ⬇
         elif $dy == 1 then
-          ([$grid[$y+1:][][$x]]|add|match("[\\-\\\\/]|.$")) as {offset:$stop, string: $square} |
+          ($tgrid[$x][$y+1:]|match("[\\-\\\\/]|.$")) as {offset:$stop, string: $square} |
           .energized += [ range($y; $y+$stop+2) as $yi | [$x,$yi] ] |
           if $square == "-" then
             .beams += [{x: $x, y: ($y+$stop+1), dx: (1,-1), dy: 0}] # ⬌ Two new beams
@@ -60,7 +68,7 @@ reduce ( # Starting from evert point outside the border pointing in:
           end
         # ⬆
         elif $dy == -1 then
-          ([$grid[0:$y][][$x]]|reverse|add|match("[\\-\\\\/]|.$")) as {offset:$stop, string: $square} |
+          ($bgrid[$x][$h-$y:]|match("[\\-\\\\/]|.$")) as {offset:$stop, string: $square} |
           .energized += [ range($y-$stop-1;$y+1) as $yi | [$x,$yi]] |
           if $square == "-" then
             .beams += [{x: $x, y: ($y-$stop-1), dx: (1,-1), dy: 0}] # ⬌ Two new beams
