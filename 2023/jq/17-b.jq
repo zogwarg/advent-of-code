@@ -19,8 +19,9 @@
 # horizontal search done .hd = null
 .[0][0] = {i: 0, j:0, v: 0, h: 0, c:0} |
 
-# Each sub list are the increments required at each intermediary
-# Steps, for exampple to go 3 squares away, the list is [1,2,3]
+# Each sub list are the increments required.
+# "Lowest"  = ±[1,2,3,4]
+# "Highest" = ±[1,2,3,4,5,6,7,8,9,10]
 [ range(4;11) | [ range(1;.+1) ] | . , map(. * -1) ] as $delta |
 
 # Until vertical and horizontal search is done for all squares
