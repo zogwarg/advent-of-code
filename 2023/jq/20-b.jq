@@ -31,12 +31,12 @@ reduce (
 
 (
   if $conj_rx | length != 1 or $conj_rx[0][0:1] != "&" then
-    "Unexpected inputs to rx \($conj_rx)"
+    "Unexpected inputs to rx \($conj_rx)" | halt_error
   end
 ) |
 (
   if any($conj2_rx[][0:1]; . != "&") or any($from[$conj2_rx[]]; length != 1) then
-    "Unexpected inputs to conj_rx \($conj2_rx)"
+    "Unexpected inputs to conj_rx \($conj2_rx)" | halt_error
   end
 ) |
 
