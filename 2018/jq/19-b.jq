@@ -78,7 +78,7 @@ until (.pg[.rg[$ipr]]|not;
   elif $op == "addr" then .rg[$c] = .rg[$a] + .rg[$b]
   elif $op == "muli" then .rg[$c] = .rg[$a] * $b
   elif $op == "mulr" then .rg[$c] = .rg[$a] * .rg[$b]
-  elif $op == "gtir" then .rg[$c] = if     $a  >    .[$b] then 1 else 0 end
+  elif $op == "gtir" then .rg[$c] = if     $a  >  .rg[$b] then 1 else 0 end
   elif $op == "gtri" then .rg[$c] = if .rg[$a] >      $b  then 1 else 0 end
   elif $op == "gtrr" then .rg[$c] = if .rg[$a] >  .rg[$b] then 1 else 0 end
   elif $op == "eqir" then .rg[$c] = if     $a  == .rg[$b] then 1 else 0 end
