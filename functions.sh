@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 advent-get-input() {
-  year=${1:-2023}
+  year=${1:-$(date +'%Y')}
   day=${2:-$(date +'%d' | jq)}
   curl -H "Cookie: session=$(cat session.txt)" -s https://adventofcode.com/${year}/day/${day}/input > input.txt
   printf $year > year.txt
@@ -18,9 +18,8 @@ advent-get-description() {
 advent-part-a() {
   cat > a.jq <<TERM
 #!/usr/bin/env jq -n -R -f
-[
-  inputs
-]
+
+[ inputs ]
 TERM
 
   chmod +x a.jq
@@ -55,6 +54,10 @@ advent-submit-b() {
 advent-write-day() {
   year=$(cat year.txt)
   day=$(cat day.txt | xargs printf "%02d")
-  mv a.jq ${year}/jq/${day}-a.jq
-  mv b.jq ${year}/jq/${day}-b.jq
+  if [[ ! $day -eq "25" ]]; then
+    mv a.jq ${year}/jq/${day}-a.jq
+    mv b.jq ${year}/jq/${day}-b.jq
+  else
+    mv a.jq ${year}/jq/${day}.jq
+  fi
 }
