@@ -12,7 +12,10 @@ advent-get-description() {
   year=$(cat year.txt)
   day=$(cat day.txt)
   curl -H "Cookie: session=$(cat session.txt)" -s https://adventofcode.com/${year}/day/${day} \
-  | jq -srR 'match("<main>.+</main>";"gm").string' | lynx -stdin -dump -nolist > description.txt
+  | jq -srR 'match("<main>.+</main>";"gm").string
+  | gsub("(?<=a href=\")(?<a>[^\"]+)\">(?<l>[^<]+)"; "\(.a)\">\(.l) [\(.a)]")
+  | gsub("(?<=<span title=\")(?<t>[^\"]+)\">(?<s>[^<]+)";"\(.t)\">\(.s) [\(.t)]")' \
+  | lynx -stdin -dump -nolist > description.txt
 }
 
 advent-part-a() {
