@@ -30,6 +30,8 @@ def callFunc($func; $io):
 
     [
         if $ma == 1 then       $a
+      elif $op == 3
+       and $ma != 2 then       $a
       elif $op == 3 then    .b+$a
       elif $ma == 2 then .s[.b+$a] // 0
                     else .s[   $a] // 0 end,

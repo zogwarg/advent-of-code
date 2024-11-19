@@ -10,7 +10,6 @@
 } as $func |
 
 def toInt($bool): if $bool then 1 else 0 end;
-
 def callFunc($func; $io):
   $func + $io | until(
     # Exit if opcode is not of type 1-9, or if output queue not empty.
@@ -30,7 +29,7 @@ def callFunc($func; $io):
     [
         if $ma == 1 then       $a
       elif $op == 3
-       and $op != 2 then       $a
+       and $ma != 2 then       $a
       elif $op == 3 then    .b+$a
       elif $ma == 2 then .s[.b+$a] // 0
                     else .s[   $a] // 0 end,

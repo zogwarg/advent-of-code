@@ -1,4 +1,4 @@
-#!/usr/bin/env jq -n -R -f
+#!/usr/bin/env jq -n -rR -f
 
 # Define function, and inputs
 {
@@ -55,11 +55,21 @@ def callFunc($func; $io):
   | if .s[.c] % 100 == 99 then .term = true else . end
 ;
 
-# Call function
-{func: callFunc($func;{in:[2]}), out: [] } | until(.func.term;
-  .out += (.func.out) |
-  .func = callFunc(.func;{out:[]})
-)
+# Recurse function until output is complete
+[ [$func, null ] | recurse(
+  if .[0].term then empty end |
+  callFunc(.[0];{in: [], out: []}) | [., .out[0]]
+) | .[1] | numbers ] |
 
-# Output result, with no failed op codes
-| .out + .func.out | .[0]
+#--- Convert to string and pretty print. ---#
+(implode|rtrimstr("\n\n")/"\n")| debug(.[]) |
+#------–––––––––––––––––––––––––––––––––––––#
+map(split(""))| [.,.[0]|length] as [$H, $W] |
+reduce (# Find alignment of all intersections
+  range(1;$H-1) as $y | range(1;$W-1) as $x |
+  [ .[$y-1:$y+2][][$x-1:$x+2] ] == [
+    [".","#","."],
+    ["#","#","#"],
+    [".","#","."]
+  ] | select(.) | $x * $y
+) as $i (0;.+$i)
