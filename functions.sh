@@ -22,7 +22,9 @@ advent-part-a() {
   cat > a.jq <<TERM
 #!/usr/bin/env jq -n -R -f
 
-[ inputs ]
+[
+  inputs
+]
 TERM
 
   chmod +x a.jq
