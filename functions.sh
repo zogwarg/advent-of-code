@@ -1,14 +1,6 @@
 #!/usr/bin/env bash
 
-advent-get-input() {
-  year=${1:-$(date +'%Y')}
-  day=${2:-$(date +'%d' | jq)}
-  curl -H "Cookie: session=$(cat session.txt)" -s https://adventofcode.com/${year}/day/${day}/input > input.txt
-  printf $year > year.txt
-  printf $day > day.txt
-}
-
-advent-get-description() {
+_advent-get-description() {
   year=$(cat year.txt)
   day=$(cat day.txt)
   curl -H "Cookie: session=$(cat session.txt)" -s https://adventofcode.com/${year}/day/${day} \
@@ -16,6 +8,15 @@ advent-get-description() {
   | gsub("(?<=a href=\")(?<a>[^\"]+)\">(?<l>[^<]+)"; "\(.a)\">\(.l) [\(.a)]")
   | gsub("(?<=<span title=\")(?<t>[^\"]+)\">(?<s>[^<]+)";"\(.t)\">\(.s) [\(.t)]")' \
   | lynx -stdin -dump -nolist > description.txt
+}
+
+advent-get-input() {
+  year=${1:-$(date +'%Y')}
+  day=${2:-$(date +'%d' | jq)}
+  curl -H "Cookie: session=$(cat session.txt)" -s https://adventofcode.com/${year}/day/${day}/input > input.txt
+  printf $year > year.txt
+  printf $day > day.txt
+  _advent-get-description
 }
 
 advent-part-a() {
