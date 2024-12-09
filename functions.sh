@@ -60,7 +60,7 @@ advent-submit-b() {
 advent-write-day() {
   year=$(cat year.txt)
   day=$(cat day.txt | xargs printf "%02d")
-  if [[ ! $day -eq "25" ]]; then
+  if [[ ! $day = "25" ]]; then
     mv a.jq ${year}/jq/${day}-a.jq
     mv b.jq ${year}/jq/${day}-b.jq
   else
