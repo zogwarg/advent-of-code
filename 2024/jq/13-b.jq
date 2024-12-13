@@ -11,6 +11,6 @@ map(.[4:6] |= map(. + 1e13)) |
   [ #   Solve system of equations with determinant  #
     (($X * $by - $Y * $bx) / ($ax * $by - $ay * $bx)),
     (($ax * $Y - $ay * $X) / ($ax * $by - $ay * $bx))
-    # Only keep solution in ℕ^2 then compute tokens #
-  ] | select(all(.[]; . == trunc)) | .[0] * 3 + .[1]
+    # Only keep solution in ℕ^2, and then compute tokens #
+  ] | select(all(.[]; . == (trunc|abs))) | .[0] * 3 + .[1]
 ] | add
