@@ -34,12 +34,18 @@ reduce range($W*$H) as $s ({ b: ., bmin: ., min: sig, smin: 0};
 
 | debug(
   #    Contrary to original hypothesis that the easter egg    #
-  #  happens in one of the quandrants, it occurs almost bang  #
-  # in the center, but this is still somehow the min product  #
+  #  happens in one of the quandrants, it is mostly centered  #
+  # It is slightly up of center, with a trunk in the middle.  #
+  #-----------------------------------------------------------#
+  #     For most steps, the vertical distribution should be   #
+  #   half-half noise, so slightly up minimizes the product.  #
+  #-----------------------------------------------------------#
+  # The easter-egg step is half-half like on most noise steps.#
+  #   But the robots in the middle trunk don't contribute to  #
+  #     the product thus minimizing the quadrant product.     #
   reduce .bmin[] as [$x,$y] ([range($H)| [range($W)| " "]];
     .[$y][$x] = "█"
-  ) |
-  .[] | add
+  ) | .[] | add
 )
 
 | .smin + 1 # Our easter egg step
