@@ -69,14 +69,14 @@ def run($A):
     end | .p += 2
   ) | .out;
 
-[ { A: [], i: 0 } | recurse (
+def _3bit_combo: [[0,1]|combinations(3)]|sort_by(.[2],.[1],.[0])[];
+
+first({ A: [], i: 0 } | recurse (
     #  Keep all candidate A that produce the end of the program,  #
     #  since not all will have valid low-bits for earlier parts.  #
-    .A = ([0,1]|combinations(6)) + .A | # Prepend all 6bit combos #
-    select(run(.A) == $pgrm[-.i*2-2:] ) # Match pgrm from end 2x2 #
+    .A = _3bit_combo + .A |             # Prepend all 3bit combos #
+    select(run(.A) == $pgrm[-.i-1:] )   # Match pgrm from end 1x1 #
     | .i += 1
     # Keep only the full program matches, and convert back to int #
-  ) | select(.i == ($pgrm|length/2)) | .A | from_bits
-]
-
-| min # From all valid self-replicating intputs output the lowest #
+  ) | select(.i == ($pgrm|length)) | .A | from_bits
+)   # First valid self-replicating input with DFS is the lowest   #
