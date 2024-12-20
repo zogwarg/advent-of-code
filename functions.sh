@@ -33,6 +33,7 @@ TERM
 }
 
 advent-part-b() {
+  _advent-get-description
   cp a.jq b.jq
   subl b.jq
 }
