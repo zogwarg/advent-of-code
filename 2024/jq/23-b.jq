@@ -4,24 +4,24 @@ reduce (
   inputs / "-" #         Build connections dictionary         #
 ) as [$a,$b] ({}; .[$a] += [$b] | .[$b] += [$a]) | . as $conn |
 
-[
-  #               For pairs of connected nodes                   #
-  ( $conn | keys[] ) as $a | $conn[$a][] as $b | select($a < $b) |
-  #             Get the list of nodes in common                  #
-      [$a,$b] + ($conn[$a] - ($conn[$a]-$conn[$b])) | unique
-]
+def bron_kerbosch1($R; $P; $X; $cliques):
+  if ($P|length) == 0 and ($X|length) == 0 then
+    if ($R|length) > 2 then
+      {cliques: ($cliques + [$R|sort])}
+    end
+  else
+    reduce $P[] as $v ({$R,$P,$X,$cliques};
+      .cliques = bron_kerbosch1(
+        .R - [$v] + [$v]     ; # R ∪ {v}
+        .P - (.P - $conn[$v]); # P ∩ neighbours(v)
+        .X - (.X - $conn[$v]); # X ∩ neighbours(v)
+           .cliques
+      )    .cliques    |
+      .P = (.P - [$v]) |       # P ∖ {v}
+      .X = (.X - [$v] + [$v])  # X ∪ {v}
+    )
+  end
+;
 
-# From largest size find the first where all the nodes in common #
-#    are interconnected -> all(connections ⋂ shared == shared)   #
-| sort_by(-length)
-| first (
-  .[] | select( . as $cb |
-    [
-        $cb[] as $c
-      | ( [$c] + $conn[$c] | sort )
-      | ( . - ( . - $cb) ) | length
-    ] | unique | length == 1
-  )
-)
-
-| join(",") # Output password
+bron_kerbosch1([];$conn|keys;[];[]).cliques
+| max_by(length) | join(",")
