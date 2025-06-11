@@ -20,8 +20,10 @@ advent-get-input() {
 }
 
 advent-part-a() {
-  cat > a.jq <<TERM
-#!/usr/bin/env jq -n -R -f
+  cat > a.jq <<'TERM'
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 [
   inputs

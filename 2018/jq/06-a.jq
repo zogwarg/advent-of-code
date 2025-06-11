@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Distance function
 def dist($x; $y): [ (.[0] - $x ), .[1] - $y ] | map(abs) | add;

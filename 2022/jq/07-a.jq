@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -sR -f
+#!/bin/sh
+# \
+exec jq -n -sR -f "$0" "$@"
 
 # Build directory tree
 reduce ( inputs / "$ " | .[] | select( . != "") | rtrimstr("\n") / "\n") as $line ({pos: [], "/":{}};

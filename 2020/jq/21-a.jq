@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 def cross: if length >= 2 then .[0] - ( .[0] - (.[1:]|cross) )
          elif length == 1 then .[0] end;

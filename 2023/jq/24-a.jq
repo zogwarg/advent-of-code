@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 200000000000000 as $low  |
 400000000000000 as $high |

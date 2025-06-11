@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -f
+#!/bin/sh
+# \
+exec jq -n -f "$0" "$@"
+
 reduce (
   # Re-arrange and produce new stream,
   # And re-use part 1 code

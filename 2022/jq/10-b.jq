@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -rR -f
+#!/bin/sh
+# \
+exec jq -n -rR -f "$0" "$@"
 
 # Utility function
 def group_of($n): . as $in | [range(0;length;$n) | $in[.:(.+$n)]];

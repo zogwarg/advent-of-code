@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -f
+#!/bin/sh
+# \
+exec jq -n -f "$0" "$@"
 
 #────────────────── Big-endian to_bits ───────────────────#
 def to_bits:

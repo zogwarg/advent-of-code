@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -rcR -f
+#!/bin/sh
+# \
+exec jq -n -rcR -f "$0" "$@"
 
 # Define initial state
 {

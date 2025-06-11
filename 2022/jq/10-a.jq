@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 reduce (                                   # Add phantom ⬇ noop if "addx" op
   inputs | [ scan("-?\\d+") | tonumber ] | if .[0] then null, . else null end

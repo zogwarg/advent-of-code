@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Absurdly slow in JQ
 inputs / "" | map(tonumber) as $recipe | ($recipe|length) as $l |

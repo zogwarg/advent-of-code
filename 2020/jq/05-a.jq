@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
+
 [
   inputs / ""
   | [ .[0:7], .[7:] ] as [$r, $c]

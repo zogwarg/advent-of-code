@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Prepare pattern to replace with ""
 ("aA" | explode) as [$a,$A] |

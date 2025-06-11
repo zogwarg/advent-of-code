@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 [ # Scan players, and last marble
   inputs | scan("\\d+") | tonumber

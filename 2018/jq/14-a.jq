@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -r -f
+#!/bin/sh
+# \
+exec jq -n -r -f "$0" "$@"
 
 inputs as $recipe |
 

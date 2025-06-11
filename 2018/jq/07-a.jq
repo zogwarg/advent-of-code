@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -rR -f
+#!/bin/sh
+# \
+exec jq -n -rR -f "$0" "$@"
+
 [ inputs | [scan("\\b[A-Z]\\b")] ] |
 
 # All steps and requirements

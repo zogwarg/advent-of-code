@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
+
 [ inputs | [scan("-?\\d+") | tonumber] ] | to_entries
 
 # Get particles with lowest acceleration

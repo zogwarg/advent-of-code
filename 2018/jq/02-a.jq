@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 reduce inputs as $line ([0,0];
   # Tally counts of 2s and 3s

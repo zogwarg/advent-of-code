@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 #                 Get our map of octopodes                   #
 [ inputs / "" | map(tonumber) ] | [.,.[0]|length] as [$H,$W] |

@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Gaze upon these fair moons, and see their dances
 [ inputs | [[scan("-?\\d+") | tonumber],[0,0,0]]]|

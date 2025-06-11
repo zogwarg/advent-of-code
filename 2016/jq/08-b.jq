@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -rR -f
+#!/bin/sh
+# \
+exec jq -n -rR -f "$0" "$@"
 
 # Screen Dimensions
 [50, 6] as [$w, $h] |

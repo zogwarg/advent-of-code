@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Get elf game-of-life board: with off->0 and on->1
 [ inputs / "" | map({".":0,"#":1}[.])] as $inputs |

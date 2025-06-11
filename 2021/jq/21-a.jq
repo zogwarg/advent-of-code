@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -sR -f
+#!/bin/sh
+# \
+exec jq -n -sR -f "$0" "$@"
 
 [ inputs | scan("\\d+") | (10+tonumber-1) % 10 ] as [$_,$p1,$_,$p2] |
 

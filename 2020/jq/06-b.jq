@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -sR -f
+#!/bin/sh
+# \
+exec jq -n -sR -f "$0" "$@"
+
 [
 #   Split -> Groups | Cleanup last item      |-> People
     inputs / "\n\n" | last |= rtrimstr("\n") | .[] / "\n"

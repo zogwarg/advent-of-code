@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Get available bridge parts
 [ inputs / "/" | map(tonumber) | sort ] as $available |

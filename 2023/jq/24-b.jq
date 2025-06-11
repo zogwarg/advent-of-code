@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Greatest Common Divisor function:
 def GCD($a; $b): if $b == 0 then $a else GCD($b; $a % $b) end;

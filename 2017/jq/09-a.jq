@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
+
 reduce(
   # Annihilitate !. pairs, clean uneeded "," and <.+> seqs
   inputs | gsub("!.|,";"") | gsub("<[^>]*>";"") / "" | .[]

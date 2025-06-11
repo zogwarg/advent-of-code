@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -f
+#!/bin/sh
+# \
+exec jq -n -f "$0" "$@"
 
 # The Jospehus problem, elf edition
 # If there are   N  = 2^a + l players

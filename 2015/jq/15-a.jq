@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Get all ingredients with associated cap, dur, flav, text, & calo values
 [ inputs | [ scan("-?\\d+") | tonumber ] ] | . as $ing | length as $num |

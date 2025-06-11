@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -f
+#!/bin/sh
+# \
+exec jq -n -f "$0" "$@"
+
 reduce inputs as $i ({s:[],t:0};
   if .s | length == 2 then
     ( [.s[], $i] | sort ) as $t |

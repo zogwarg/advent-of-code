@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 reduce ( inputs | [ scan("-?\\d+") | tonumber ] ) as $point ([];
   def mann_d($p): [.,$p] | transpose | map(.[0]-.[1]|abs) | add;

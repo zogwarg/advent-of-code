@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Get our availables towels and our list of desired patterns  #
 [ inputs ] | [ (.[0] / ", "), .[2:] ] as [$towels, $patterns] |

@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -f
+#!/bin/sh
+# \
+exec jq -n -f "$0" "$@"
 
 25 as $w | [ inputs ] as $inputs |
 

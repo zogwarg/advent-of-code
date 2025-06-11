@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
+
 [ inputs / "" ] as $grid |
 ($grid   | length/2 |floor) as $H |
 ($grid[0]| length/2 |floor) as $W |

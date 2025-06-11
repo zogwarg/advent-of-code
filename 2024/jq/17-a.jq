@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -rR -f
+#!/bin/sh
+# \
+exec jq -n -rR -f "$0" "$@"
 
 [ inputs | scan("\\d+") | tonumber ] | .[3:] |= [.]
 | . as [$A,$B,$C,$pgrm] |

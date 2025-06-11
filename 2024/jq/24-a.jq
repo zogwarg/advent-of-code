@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -sR -f
+#!/bin/sh
+# \
+exec jq -n -sR -f "$0" "$@"
 
 #────────────────── Big-endian from_bits ────────────────────────#
 def from_bits: [ range(length) as $i | .[$i] * pow(2; $i) ] | add;

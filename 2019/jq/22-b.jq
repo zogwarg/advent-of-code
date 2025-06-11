@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -rR -f
+#!/bin/sh
+# \
+exec jq -n -rR -f "$0" "$@"
 
                   # Get all shuffle operations
 [ inputs | [ scan("^[cd]"), (scan("-?\\d+") | tonumber) ]] as $shuf |

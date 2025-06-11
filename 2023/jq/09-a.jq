@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
+
 [
   # For each line, get numbers eg: [ [1,2,3] ]
   inputs / " " | map(tonumber) | [ . ] |

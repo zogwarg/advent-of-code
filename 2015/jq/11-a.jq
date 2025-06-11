@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -rR -f
+#!/bin/sh
+# \
+exec jq -n -rR -f "$0" "$@"
 
 # Get inputs, mapped to [0,25], little-end
 inputs | explode | map(. - 97) | reverse |

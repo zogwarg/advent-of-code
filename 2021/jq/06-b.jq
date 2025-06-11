@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
+
 reduce range(256) as $i (
   # Count the number of fish in array [ day 0, day 1, ... ]
   reduce(inputs | scan("\\d+") | tonumber) as $n ([]; .[$n] += 1);

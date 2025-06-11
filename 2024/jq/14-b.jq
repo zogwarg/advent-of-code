@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 #     Board size     # Our list of robots positions and speed #
 [101,103] as [$W,$H] | [ inputs | [scan("-?\\d+")|tonumber] ] |

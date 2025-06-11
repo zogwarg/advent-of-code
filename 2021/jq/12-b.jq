@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 [ inputs / "-" | ., reverse ] | group_by(.[0])
 | map({(.[0][0]): map(.[1]) })

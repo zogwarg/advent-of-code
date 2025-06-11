@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Getting input with padding, and padded width
 [ "." + inputs + "." ] as $inputs | ( $inputs[0] | length ) as $w |

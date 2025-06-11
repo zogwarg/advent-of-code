@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -f
+#!/bin/sh
+# \
+exec jq -n -f "$0" "$@"
+
 {
   in: input,
   grid: {"0,0": 1},

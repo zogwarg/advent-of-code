@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -sR -f
+#!/bin/sh
+# \
+exec jq -n -sR -f "$0" "$@"
 
 # Reverse string - Transpose Tile - Rotate Tile
 def rev:     explode  |  reverse  |     implode ;

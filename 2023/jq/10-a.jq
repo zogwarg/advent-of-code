@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Parse inputs to grid
 [ inputs ] | [(add|.,index("S")),(.[0] | length),length] as [$grid,$s,$w,$h] |

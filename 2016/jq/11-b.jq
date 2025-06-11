@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 [ # Parse inputs as list of floors with items: [[["pol","m"],["pol","g"]], ...]
   inputs

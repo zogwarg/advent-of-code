@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -f
+#!/bin/sh
+# \
+exec jq -n -f "$0" "$@"
 
 reduce (inputs|[.,0]) as [$n,$d] ({};     debug({$n,$d,result}) |
   def next($n;$d): # Get next           # n: number, d: depth  #

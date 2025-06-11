@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -rR -f
+#!/bin/sh
+# \
+exec jq -n -rR -f "$0" "$@"
 
 [ # Linked list # Curr   # Previous         # Next
   inputs / "" | [ .    , (.[-1:] + .[:-1]), ( .[1:] + .[:1] ) ]

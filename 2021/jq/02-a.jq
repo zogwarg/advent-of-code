@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
+
 reduce inputs as $line ({z: 0,x: 0};
   ($line / " " | {(.[0][0:1]): (.[1] | tonumber)}) as $m
   | .z += ( $m.d // 0 )

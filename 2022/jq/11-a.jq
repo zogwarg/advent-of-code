@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -sR -f
+#!/bin/sh
+# \
+exec jq -n -sR -f "$0" "$@"
 
 { #                   Parse monkey behaviour                    #
   monkeys: [ inputs | rtrimstr("\n") | split("\n\n")[] / "\n" | {

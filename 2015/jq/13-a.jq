@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 [ # Parse inputs, ⬇ lose = negative |  ⬇ 1st letters of names   |   ⬇ Parse number
   inputs | gsub("lose ";"-") | [scan("([A-Z]).+([A-Z])")[], (scan("-?\\d+")|tonumber)]

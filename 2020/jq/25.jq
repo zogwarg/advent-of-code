@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -f
+#!/bin/sh
+# \
+exec jq -n -f "$0" "$@"
 
 [ inputs ] as [$card_pub, $door_pub] | 20201227 as $M |
 

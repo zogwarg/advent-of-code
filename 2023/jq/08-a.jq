@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Get LR instructions
 ( input / "" | map(if . == "L" then 0 else 1 end )) as $LR |

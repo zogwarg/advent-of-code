@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -rR -f
+#!/bin/sh
+# \
+exec jq -n -rR -f "$0" "$@"
 
 # Get all [ node, [node_val, <sum_children_val>, <0> ] , [ ..<chlidren> ]]
 [ inputs | [ scan("[a-z]+|\\d+") ] | .[1] |=  tonumber  | .[1:] |= map([.]) ] |

@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -crR -f
+#!/bin/sh
+# \
+exec jq -n -crR -f "$0" "$@"
 
 ( # If solving manually input need --arg swaps
   # Expected format --arg swaps 'n01-n02,n03-n04'

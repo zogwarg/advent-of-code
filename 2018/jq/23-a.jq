@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Scanning for all nanobots, assemble !
 [ inputs | [ scan("-?\\d+")|tonumber ]]

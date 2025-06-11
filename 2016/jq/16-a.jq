@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -rR -f
+#!/bin/sh
+# \
+exec jq -n -rR -f "$0" "$@"
 
 # Our dragon curve and checksum functions
 def dragon: . + "0" + ( . / "" | reverse | map({"0":"1","1":"0"}[.]) | add );

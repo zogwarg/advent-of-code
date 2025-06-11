@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Getting disks with [x,y,size,used,avail,use_percentage]
 [ inputs | [ scan("\\d+") | tonumber ] ][1:] as $disks |

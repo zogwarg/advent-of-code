@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 def do($step):  #  Using cube coordinates (plane x + y + z = 0)  #
   .[0] += {"w": 0,"e": 0,"nw": 1,"se":-1,"sw":-1,"ne": 1}[$step] |

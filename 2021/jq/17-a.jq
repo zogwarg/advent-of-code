@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 #                 Get target area coordinates                 #
 [ inputs | [scan("-?\\d+")|tonumber] ] as [[$x1,$x2,$y1,$y2]] |

@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 { A:0, B:1, C:2, D:3 } as $idx   | # Our amphipod types        #
 [   1,  10, 100,1000 ] as $costs | # Their cost                #

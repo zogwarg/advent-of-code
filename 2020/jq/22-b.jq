@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -sR -f
+#!/bin/sh
+# \
+exec jq -n -sR -f "$0" "$@"
 
 inputs / "\n\n" | map([scan("\\d+")|tonumber][1:]) |
 

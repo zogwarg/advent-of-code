@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -srR -f
+#!/bin/sh
+# \
+exec jq -n -srR -f "$0" "$@"
 
 inputs / "\n\n"
 

@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 { # Get all starting bricks, sorted by z, so they can be
   # Dropped in order, with proper "top" collision

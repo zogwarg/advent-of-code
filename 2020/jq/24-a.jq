@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 def toHexTile: reduce scan("se|sw|ne|nw|e|w") as $step (
   {x:0,y:0,z:0};  # Using cube coordinates (plane x + y + z = 0)

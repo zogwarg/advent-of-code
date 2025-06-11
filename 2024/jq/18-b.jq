@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -rR -f
+#!/bin/sh
+# \
+exec jq -n -rR -f "$0" "$@"
 
 ([{"\(range(71) as $x | range(71) as $y | [$x,$y])": 0 }
 ]|add)  | #         Intialize grid with zeroes         #

@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # For each game: Is 12 red cubes, 13 green cubes, and 14 blue cubes possible ?
 # Line Format =

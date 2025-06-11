@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Get gamma binary string
 .gb = ( [ inputs / "" ]  | transpose | [ .[] | group_by(.) | sort_by(-length) | .[0][0] ] | add )

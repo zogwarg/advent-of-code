@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # Setup state
 {banks: [inputs | scan("\\d+") | tonumber]} | ( .banks | length ) as $l | . + {s: [], i: 0}

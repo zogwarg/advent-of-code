@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -sR -f
+#!/bin/sh
+# \
+exec jq -n -sR -f "$0" "$@"
 
 # Utility function
 def assert($stmt; $msg): if $stmt == false then $msg | halt_error end;

@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 # A poor JQ's man bit uint16 operators
 ( pow(2;16) - 1 ) as $intMax |

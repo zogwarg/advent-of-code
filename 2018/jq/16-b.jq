@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -csR -f
+#!/bin/sh
+# \
+exec jq -n -csR -f "$0" "$@"
 
 # Parse inputs
 inputs / "\n\n\n" | .[0] = [ .[0] / "\n\n" | .[] | [ scan("\\d+")|tonumber ] | {

@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -s -R -f
+#!/bin/sh
+# \
+exec jq -n -s -R -f "$0" "$@"
 
 # Ignoring "cid"
 ["byr","iyr","eyr","hgt","hcl","ecl","pid"] as $req_fields |

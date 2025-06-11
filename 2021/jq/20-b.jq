@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -sR -f
+#!/bin/sh
+# \
+exec jq -n -sR -f "$0" "$@"
 
 
 inputs | rtrimstr("\n") / "\n\n" | .[0] as $LK | .[1] / "\n" |

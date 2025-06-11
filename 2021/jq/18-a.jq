@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -f
+#!/bin/sh
+# \
+exec jq -n -f "$0" "$@"
 
 #                Magnitude of snailfish number                 #
 def mag: walk(if type == "array" then 3 * first + 2 * last end);

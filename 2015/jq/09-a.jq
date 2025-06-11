@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
+
 [
   inputs / " "
   | [.[0,2,-1]] | .[-1] |= tonumber # [Place A, Place B, distance]

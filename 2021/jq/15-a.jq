@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 #───────────────────────────── Get risk map ─────────────────────────#
 [ inputs/"" | map(tonumber) ] | . as $X | [.,.[0]|length] as [$H,$W] |

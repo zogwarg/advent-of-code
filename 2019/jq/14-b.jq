@@ -1,4 +1,6 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
 
 reduce(
   ( inputs | [scan("\\d+ [A-Z]+") /" " | .[0] |= tonumber] | reverse),

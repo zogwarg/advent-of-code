@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -f
+#!/bin/sh
+# \
+exec jq -n -f "$0" "$@"
+
 [ inputs ] as $inputs |
 
 # Generate unique combinations of size $n

@@ -1,4 +1,7 @@
-#!/usr/bin/env jq -n -R -f
+#!/bin/sh
+# \
+exec jq -n -R -f "$0" "$@"
+
 [ inputs | scan("\\d+") | tonumber ] as $stream | ($stream | length) as $l |
 
 # Parse message tree
