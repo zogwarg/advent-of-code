@@ -29,3 +29,7 @@ advent-submit-b # Runs and submits part 2 to AoC website.
 
 advent-write-day # Once day is complete, copies solution to /<year>/jq/<day>-<a|b>.jq
 ```
+
+# Debugging params
+
+Some useful jq debugging parameters are `--debug-dump-disasm` and `--debug-trace`

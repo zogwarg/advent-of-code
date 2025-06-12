@@ -3,11 +3,17 @@
 exec jq -n -R -f "$0" "$@"
 
 reduce (
-  inputs
-  | [ match("(on|off|toggle) (\\d+),(\\d+) through (\\d+),(\\d+)").captures[].string ]
-  | .[1:] |= map(tonumber)
-) as [$act, $xa, $ya, $xb, $yb] ([range(1000) | [range(1000) | 0]];
-  .[range($xa; $xb + 1)][range($ya; $yb + 1)] |= (
-    if $act == "on" then 1 elif $act == "off" then 0 else 1 - . end
-  )
-) | [ .[][] ] | add
+  inputs | [ scan("on|off|toggle"), ( scan("\\d+") | tonumber ) ]
+) as [$act, $xa, $ya, $xb, $yb] (
+  [ range(1000) | [ range(1000) | 0 ] ];
+  if   $act == "on" then
+    .[$xa:$xb+1][][$ya:$yb+1] = [ range($ya;$yb +1) | 1 ]
+  elif $act == "off" then
+    .[$xa:$xb+1][][$ya:$yb+1] = [ range($ya;$yb +1) | 0 ]
+  elif $act == "toggle" then
+    .[$xa:$xb+1][][$ya:$yb+1] |= map(1 - .)
+  else
+    "Unexpected action: \({$act})" | halt_error
+  end
+
+) | [ .[] | add ] | add
