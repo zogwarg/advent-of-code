@@ -2,39 +2,40 @@
 # \
 exec jq -n -rR -f "$0" "$@"
 
-# Get inputs, mapped to [0,25], little-end
-inputs | explode | map(. - 97) | reverse |
+# Get input password mapped to range: [0, 25]
+inputs | explode | map(. - 97) as $password |
+ "iol" | explode | map(. - 97) as $iol      |
+# And list of confusing password characters |
 
-until (
-  # Three consecutive letters
-  any(
-    range(0;length-3) as $i | .[$i:$i+3];
-    .[0] == .[2] + 2 and .[1] == .[2] + 1
-  )
-  and
-  # Two non overlapping double letters
-  any(
-    range(0;length-4) as $i | range($i+2;length-2) as $j |
-    [ .[$i:$i+2][], .[$j:$j+2][] ];
-    .[0] == .[1] and .[2] == .[3] and .[0] != .[2]
-  )
-  ; # Increase string to next item
-    # Starting with increase by 1
-    .[0] += 1 | reduce .[] as $i ({d:[],c:0};
-    # Include carry
-    ( $i + .c ) as $i |
+if $password | length < 7 then
+  "Password is too short!" | halt_error
+elif $password[-6] == $password[-7] + 1 or $password[-6] == 25 then
+  "Assumptions about input not met" | halt_error
+end |
 
-    # Does the next digit have a carry
-    .c = (if $i == 26 then 1 else 0 end) |
+# Head of the password should not change. Carry #
+$password[:-6] as $head | $password[-6] as $mid |
 
-    ( # Setting current letter, resetting to "a" if > "z"
-      if $i == 26 then 0
-      # Skipping i          o           l
-      elif $i == 8 or $i == 14 or $i == 11 then ( $i + 1 )
-      else $i end
-    ) as $i | .d += [$i]
-  ) | .d # New letter "digits"
-)
+[  # Get fist availble double letters arrangement
+    $password[-5:-3], # consecutive in the middle
+  [ $password[-3], $password[-3] ],
+    $password[-2:]
+  | . as [$a,$b]
+  | if $a >= $b then $a else $a + 1 end
+] as [$aa, $b, $cc ] | #       ___aabcc         #
 
-# Revert to string representation
-| reverse | map(. + 97) | implode
+$head + (
+  if $aa <= 23 and $b <= $aa + 1 then
+    [ $mid ] + first(
+        range($aa; 26) as $aa
+      | [$aa, $aa, $aa + 1, $aa + 2, $aa + 2]
+      | select(all(.[] != $iol[];.))
+    )
+  else
+    [
+      first(
+        range($mid; 25) + 1 | select(all(. != $iol[]; .))
+      ), 1, 1, 2, 3, 3
+    ]
+  end
+) | map(. + 97) | implode
