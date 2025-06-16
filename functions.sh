@@ -1,19 +1,32 @@
 #!/usr/bin/env bash
 
 _advent-get-description() {
-  year=$(cat year.txt)
-  day=$(cat day.txt)
-  curl -H "Cookie: session=$(cat session.txt)" -s https://adventofcode.com/${year}/day/${day} \
+  local year=$(cat year.txt)
+  local day=$(cat day.txt)
+
+  curl \
+    -H "Cookie: session=$(cat session.txt)" \
+    -s https://adventofcode.com/${year}/day/${day} \
   | jq -srR 'match("<main>.+</main>";"gm").string
-  | gsub("(?<=a href=\")(?<a>[^\"]+)\">(?<l>.+?)(?=</a)"; "\(.a)\">\(.l) [\(.a)]")
-  | gsub("(?<=<span title=\")(?<t>[^\"]+)\">(?<s>.+?)(?=</span)";"\(.t)\">\(.s) [\(.t)]")' \
+  | gsub(
+      "(?<=a href=\")(?<a>[^\"]+)\">(?<l>.+?)(?=</a)";
+      "\(.a)\">\(.l) [\(.a)]"
+    )
+  | gsub(
+      "(?<=<span title=\")(?<t>[^\"]+)\">(?<s>.+?)(?=</span)";
+      "\(.t)\">\(.s) [\(.t)]"
+    )' \
   | lynx -stdin -dump -nolist > description.txt
 }
 
 advent-get-input() {
-  year=${1:-$(date +'%Y')}
-  day=${2:-$(date +'%d' | jq)}
-  curl -H "Cookie: session=$(cat session.txt)" -s https://adventofcode.com/${year}/day/${day}/input > input.txt
+  local year=${1:-$(date +'%Y')}
+  local day=${2:-$(date +'%d' | jq)}
+
+  curl \
+    -H "Cookie: session=$(cat session.txt)" \
+    -s https://adventofcode.com/${year}/day/${day}/input > input.txt
+
   printf $year > year.txt
   printf $day > day.txt
   _advent-get-description
@@ -41,9 +54,11 @@ advent-part-b() {
 }
 
 advent-submit-a() {
-  year=$(cat year.txt)
-  day=$(cat day.txt)
-  curl -s https://adventofcode.com/${year}/day/${day}/answer \
+  local year=$(cat year.txt)
+  local day=$(cat day.txt)
+
+  curl \
+    -s https://adventofcode.com/${year}/day/${day}/answer \
     -H "Cookie: session=$(cat session.txt)" \
     -H 'content-type: application/x-www-form-urlencoded' \
     -d "level=1&answer=$(./a.jq input.txt | jq -rR '@uri')" \
@@ -51,9 +66,11 @@ advent-submit-a() {
 }
 
 advent-submit-b() {
-  year=$(cat year.txt)
-  day=$(cat day.txt)
-  curl -s https://adventofcode.com/${year}/day/${day}/answer \
+  local year=$(cat year.txt)
+  local day=$(cat day.txt)
+
+  curl \
+    -s https://adventofcode.com/${year}/day/${day}/answer \
     -H "Cookie: session=$(cat session.txt)" \
     -H 'content-type: application/x-www-form-urlencoded' \
     -d "level=2&answer=$(./b.jq input.txt | jq -rR '@uri')" \
@@ -61,8 +78,9 @@ advent-submit-b() {
 }
 
 advent-write-day() {
-  year=$(cat year.txt)
-  day=$(cat day.txt | xargs printf "%02d")
+  local year=$(cat year.txt)
+  local day=$(cat day.txt | xargs printf "%02d")
+
   if [[ ! $day = "25" ]]; then
     mv a.jq ${year}/jq/${day}-a.jq
     mv b.jq ${year}/jq/${day}-b.jq
@@ -79,9 +97,13 @@ _advent_complete()
   prev="${COMP_WORDS[COMP_CWORD-1]}"
 
   NEXT_DAY=($(find ./20* -name '*.jq' | jq -rR '
-    [inputs | [scan("\\d+")]] | first(
-      group_by(.[0]) | map(sort_by(.[1]) | reverse[0]
-    ) | .[] | select(.[1] != "25")) | .[0], (.[1] | tonumber + 101 | tostring[-2:])')
+    [ inputs | [scan("\\d+")] ]
+    | first(
+        group_by(.[0])
+        | map(sort_by(.[1]) | reverse[0] )
+        | .[] | select(.[1] != "25")
+      )
+    | .[0], (.[1] | tonumber + 101 | tostring[-2:])')
   )
 
   if [[ "${prev}" == "advent-get-input" ]]; then
@@ -96,3 +118,54 @@ _advent_complete()
 }
 
 complete -F _advent_complete advent-get-input
+
+# Local running utilities, including non commited inputs and descriptions
+if [[ -d "$PWD/.tom_safe" ]] ; then
+  # Used to override jq version in used,
+  # Binaries or symlinks should be included at ~/.tom_safe/$JQ_VERSION
+  JQ_VERSION=${JQ_VERSION:-local}
+  if [[ -f "$PWD/.tom_safe/$JQ_VERSION/jq" ]] ; then
+    PATH="$PWD/.tom_safe/$JQ_VERSION:$PATH"
+  fi
+
+  x-advent()
+  {
+    local YEAR=$1
+    local PART=$2
+
+    if [[ $PART =~ ^[0-9]{2}$ ]] && [[ $PART != "25" ]] ; then
+      echo "${YEAR}/${PART}:"; echo
+      time \
+        ./${YEAR}/jq/${PART}-a.jq \
+        ./.tom_safe/${YEAR}-${PART/-[ab]/}.input.txt
+      echo
+      time \
+        ./${YEAR}/jq/${PART}-b.jq \
+        ./.tom_safe/${YEAR}-${PART/-[ab]/}.input.txt
+      echo
+      cat ./.tom_safe/${YEAR}-${PART/-[ab]/}.description.txt \
+        | grep -e 'answer was' | sed -Ee 's/^ +//'
+      echo
+    elif [[ $PART =~ ^[0-9]{2}-a$ ]] || [[ $PART == "25" ]] ; then
+      echo "${YEAR}/${PART}:"; echo
+      time \
+        ./${YEAR}/jq/${PART}.jq \
+        ./.tom_safe/${YEAR}-${PART/-[ab]/}.input.txt
+      echo
+      cat ./.tom_safe/${YEAR}-${PART/-[ab]/}.description.txt \
+        | grep -e 'answer was' | sed -Ee 's/^ +//' | head -n 1
+      echo
+    elif [[ $PART =~ ^[0-9]{2}-b$ ]] ; then
+      echo "${YEAR}/${PART}:"; echo
+      time \
+        ./${YEAR}/jq/${PART}.jq \
+        ./.tom_safe/${YEAR}-${PART/-[ab]/}.input.txt
+      echo
+      cat ./.tom_safe/${YEAR}-${PART/-[ab]/}.description.txt \
+        | grep -e 'answer was' | sed -Ee 's/^ +//' | tail -n 1
+      echo
+    else
+      echo "Unexpected PART: $PART"
+    fi
+  }
+fi
