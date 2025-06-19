@@ -2,17 +2,12 @@
 # \
 exec jq -n -R -f "$0" "$@"
 
-# TODO: Remove `reverse` and use big-endians
-
 #═════════════════════ Bit operations Utilities! ════════════════════#
 
 def to_bytes: { a: ., b: [] } | until(.a == 0;
-  .b = [ .a % pow(2; 8) ] + .b |
+  .b = .b + [ .a % pow(2; 8) ]|
   .a = ( .a | significand * pow(2; logb-8) | floor )
 ) | .b;
-
-def from_bytes: reduce ( reverse | to_entries[] ) as
-  { key: $n, value: $v } (0; . + $v * pow(2; 8*$n));
 
 #    A jq poor man's 8-bit hashmaps, used in the 32 bit functions    #
 {
@@ -46,16 +41,16 @@ def not32($a): [
 
 def add32($nums): reduce range(4) as $i (
   { $nums, out: [], carry: 0 };
-  .out[3 - $i] = ( [ .carry, .nums[][3 - $i] ] | add ) |
-  .carry =  ( .out[3 - $i] / 256 | floor ) |
-  .out[3 - $i] = .out[3 - $i] % 256
+  .out[$i] = ( [ .carry, .nums[][$i] ] | add ) |
+  .carry =  ( .out[$i] / 256 | floor ) |
+  .out[$i] = .out[$i] % 256
 ) | .out;
 def add32($a;$b):       add32([$a,$b]);
 def add32($a;$b;$c;$d): add32([$a,$b,$c,$d]);
 
 def leftrot32($a;$n): [
-  range(4) as $i | ( $i + ($n/8 | floor )) as $j | ( $n % 8 ) as $n |
-  $rot8_l[$a[$j % 4]][$n] + $rot8_r[$a[($j + 1) % 4]][$n]
+  range(4) as $i | ($i - ($n/8| floor)) as $j | ( $n % 8 ) as $n |
+  $rot8_l[$a[(4 + $j) % 4]][$n] + $rot8_r[$a[(7 + $j) % 4]][$n]
 ];
 
 #════════════════════ A Very inefficient MD5SUM! ════════════════════#
@@ -83,7 +78,7 @@ def md5sum:
   .message = .message + [ 128 ] + [
     range(56 - $L - 1 | . % 64 | . + 64 | . % 64 ) | 0
   ] + (
-    $L * 8 | [ range(7) | 0 ] + to_bytes | .[-8:] | reverse
+    $L * 8 | to_bytes + [ range(7) | 0 ] | .[:8]
   ) |
 
   # Not really necessary since only one chunk, but iterate on chunks!
@@ -91,7 +86,6 @@ def md5sum:
     range(0;.message|length;64) as $chunk |
     .message[$chunk:$chunk+64] |
     ( . as $in | [ range(0;length;4) | $in[.:(.+4)]] )
-    | map(reverse)
   ) as $M (
     { hash: [$A0,$B0,$C0,$D0] };
     reduce range(0;64) as $i (
@@ -139,7 +133,7 @@ first(
   range(1e9) as $i
   | if $i % 100 == 0 then debug({$i}) end
   | "\($in)\($i)" | md5sum
-  | select(.[0][-1] == 0 and .[0][-2] == 0 and .[0][-3] == 0)
-  | debug([ .[] | reverse[] | $to_hex[.] ] | add)
+  | select(.[0][0:3] == [0,0,0])
+  | debug([ .[][] | $to_hex[.] ] | add)
   | $i
 )
