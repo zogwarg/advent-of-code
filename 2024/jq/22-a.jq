@@ -1,6 +1,6 @@
 #!/bin/sh
 # \
-exec jq -n -f "$0" "$@"
+F="$0" I="$1" exec sh -c '( seq 0 9 | xargs -P 10 -n 1 -I {} bash -c '\''jq -n -f "$F" --argjson p 10 --argjson s {} "$I" > out-{}.json'\'' ) && (cat out-*.json | jq -nf "$F" --argjson group 1 ) && rm out-*.json'
 
 #─────────── Big-endian to_bits and from_bits ────────────#
 def to_bits:
@@ -29,17 +29,9 @@ def from_bits: [ range(length) as $i | .[$i] * pow(2; $i) ] | add;
 # Optimized Next, doing XOR of indices simultaneously a 2x speedup #
 def next: . as $in | $next_ind | map( [ $in[.[]] // 0 ] | add % 2 );
 
-# Option to run in parallel using xargs, Eg:
-#
-# seq 0 9 | \
-# xargs -P 10 -n 1 -I {} bash -c './2024/jq/22-a.jq input.txt \
-# --argjson s 10 --argjson i {} > out-{}.json'
-# cat out-*.json | ./2024/jq/22-a.jq --argjson group true
-# rm out-*.json
-#
-# Speedup from naive ~10m -> ~35s
-def parallel: if $ARGS.named.s and $ARGS.named.i  then
-   select(.key % $ARGS.named.s ==  $ARGS.named.i) else . end ;
+# Parralel mode speedup from naive ~10m -> ~35s
+def parallel: if $ARGS.named.p and $ARGS.named.s  then
+   select(.key % $ARGS.named.p ==  $ARGS.named.s) else . end ;
 
 #════════════════════════════ X-GROUP ═══════════════════════════════#
 if $ARGS.named.group then reduce inputs as $i (0; . + $i) else
