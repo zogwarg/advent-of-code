@@ -136,11 +136,11 @@ if [[ -d "$PWD/.tom_safe" ]] ; then
     if [[ $PART =~ ^[0-9]{2}$ ]] && [[ $PART != "25" ]] ; then
       echo "${YEAR}/${PART}:"; echo
       time \
-        ./${YEAR}/jq/${PART}-a.jq \
+        ./${YEAR}/jq/${PART}-a.jq "${@:3}" \
         ./.tom_safe/${YEAR}-${PART/-[ab]/}.input.txt
       echo
       time \
-        ./${YEAR}/jq/${PART}-b.jq \
+        ./${YEAR}/jq/${PART}-b.jq "${@:3}" \
         ./.tom_safe/${YEAR}-${PART/-[ab]/}.input.txt
       echo
       cat ./.tom_safe/${YEAR}-${PART/-[ab]/}.description.txt \
@@ -149,7 +149,7 @@ if [[ -d "$PWD/.tom_safe" ]] ; then
     elif [[ $PART =~ ^[0-9]{2}-a$ ]] || [[ $PART == "25" ]] ; then
       echo "${YEAR}/${PART}:"; echo
       time \
-        ./${YEAR}/jq/${PART}.jq \
+        ./${YEAR}/jq/${PART}.jq "${@:3}" \
         ./.tom_safe/${YEAR}-${PART/-[ab]/}.input.txt
       echo
       cat ./.tom_safe/${YEAR}-${PART/-[ab]/}.description.txt \
@@ -158,7 +158,7 @@ if [[ -d "$PWD/.tom_safe" ]] ; then
     elif [[ $PART =~ ^[0-9]{2}-b$ ]] ; then
       echo "${YEAR}/${PART}:"; echo
       time \
-        ./${YEAR}/jq/${PART}.jq \
+        ./${YEAR}/jq/${PART}.jq "${@:3}" \
         ./.tom_safe/${YEAR}-${PART/-[ab]/}.input.txt
       echo
       cat ./.tom_safe/${YEAR}-${PART/-[ab]/}.description.txt \
