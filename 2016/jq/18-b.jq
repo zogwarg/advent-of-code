@@ -6,7 +6,7 @@ exec jq -n -R -f "$0" "$@"
 [["w"] + ( inputs / "" ) + ["w"]] |
 
 # Get next 399999 rows
-until (length | debug == 400000;
+until (length|debug(if . % 1000 == 0 then . else empty end) == 400000;
   .[-1] as $in |
   . + [
     [
