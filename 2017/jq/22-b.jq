@@ -53,7 +53,9 @@ reduce range(10000000) as $_ (
     .state["\(.pos)"] = 1
   end |
   # Move forwards
-  .pos = ([.pos,.dir]|transpose|map(add)) | debug($_)
+  .pos = ([.pos,.dir]|transpose|map(add))
+
+  | debug(if $_ % 1000 == 0 then {$_} else empty end)
 )
 
 # Output number of infections
