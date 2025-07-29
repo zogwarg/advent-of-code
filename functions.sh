@@ -103,7 +103,7 @@ _advent_complete()
         | map(sort_by(.[1]) | reverse[0] )
         | .[] | select(.[1] != "25")
       )
-    | .[0], (.[1] | tonumber + 101 | tostring[-2:])')
+    | .[0], (.[1] | tonumber + 1)')
   )
 
   if [[ "${prev}" == "advent-get-input" ]]; then
