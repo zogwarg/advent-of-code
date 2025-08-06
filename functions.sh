@@ -128,7 +128,7 @@ if [[ -d "$PWD/.tom_safe" ]] ; then
     PATH="$PWD/.tom_safe/$JQ_VERSION:$PATH"
   fi
 
-  x-advent()
+  x-advent-jq()
   {
     local YEAR=$1
     local PART=$2
@@ -167,5 +167,17 @@ if [[ -d "$PWD/.tom_safe" ]] ; then
     else
       echo "Unexpected PART: $PART"
     fi
+  }
+
+  x-advent-go()
+  {
+    local YEAR=$1
+    local DAY=$2
+
+    echo "${YEAR}/${DAY}:"; echo
+    time ./${YEAR}/go/${DAY}.go ./.tom_safe/${YEAR}-${DAY}.input.txt
+    echo
+    cat ./.tom_safe/${YEAR}-${DAY}.description.txt \
+      | grep -e 'answer was' | sed -Ee 's/^ +//'
   }
 fi
