@@ -16,7 +16,6 @@ exec jq -n -R -f "$0" "$@"
     if .schematic[$y+1][$x] == "." then
       .tachions["\([$y+1,$x])"] += $c
     elif .schematic[$y+1][$x] == "^" then
-      .splits += 1 |
       .tachions["\((1,-1) as $d | [($y+1),($x+$d)])"] += $c
     end
   )
