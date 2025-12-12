@@ -128,6 +128,14 @@ if [[ -d "$PWD/.tom_safe" ]] ; then
     PATH="$PWD/.tom_safe/$JQ_VERSION:$PATH"
   fi
 
+  x-advent-copy()
+  {
+    local year=$(cat year.txt)
+    local day=$(cat day.txt | xargs printf "%02d")
+    cp input.txt ./.tom_safe/${year}-${day}.input.txt
+    cp description.txt ./.tom_safe/${year}-${day}.description.txt
+  }
+
   x-advent-jq()
   {
     local YEAR=$1
@@ -135,14 +143,18 @@ if [[ -d "$PWD/.tom_safe" ]] ; then
 
     if [[ $PART =~ ^[0-9]{2}$ ]] && [[ $PART != "25" ]] ; then
       echo "${YEAR}/${PART}:"; echo
-      time \
-        ./${YEAR}/jq/${PART}-a.jq "${@:3}" \
-        ./.tom_safe/${YEAR}-${PART/-[ab]/}.input.txt
-      echo
-      time \
-        ./${YEAR}/jq/${PART}-b.jq "${@:3}" \
-        ./.tom_safe/${YEAR}-${PART/-[ab]/}.input.txt
-      echo
+      if [[ -f ./${YEAR}/jq/${PART}-a.jq ]]; then
+        time \
+          ./${YEAR}/jq/${PART}-a.jq "${@:3}" \
+          ./.tom_safe/${YEAR}-${PART/-[ab]/}.input.txt
+        echo
+      fi
+      if [[ -f ./${YEAR}/jq/${PART}-b.jq ]]; then
+        time \
+          ./${YEAR}/jq/${PART}-b.jq "${@:3}" \
+          ./.tom_safe/${YEAR}-${PART/-[ab]/}.input.txt
+        echo
+      fi
       cat ./.tom_safe/${YEAR}-${PART/-[ab]/}.description.txt \
         | grep -e 'answer was' | sed -Ee 's/^ +//'
       echo
